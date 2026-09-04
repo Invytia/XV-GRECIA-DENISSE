@@ -7,14 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Pinyon+Script&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Paleta Fucsia y Blanco (Inspirada en Referencia) */
-            --fuchsia-main: #D1207A; 
-            --fuchsia-dark: #A1145A;
-            --fuchsia-light: #E85B9E;
+            /* Paleta Fucsia atenuada y Blanco */
+            --fuchsia-main: #C15D89;
+            --fuchsia-dark: #8F4568;
+            --fuchsia-light: #D98CAE;
             --white-pure: #FFFFFF;
             --text-light: #FDFDFD;
-            --accent-light: #FFD1E8; 
-            
+            --accent-light: #F5D6E4;
+
             --transition-smooth: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
@@ -36,6 +36,37 @@
             color: var(--text-light);
             overflow-x: hidden;
             scroll-behavior: smooth;
+        }
+
+        /* --- BRILLITOS / GLITTER --- */
+        .glitter-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1500;
+        }
+
+        .sparkle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.2) 70%, rgba(255,255,255,0) 100%);
+            box-shadow: 0 0 6px 2px rgba(255,255,255,0.6);
+            opacity: 0;
+            animation-name: twinkle;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+
+        .sparkle.pink {
+            background: radial-gradient(circle, rgba(245,214,228,1) 0%, rgba(245,214,228,0.2) 70%, rgba(245,214,228,0) 100%);
+            box-shadow: 0 0 6px 2px rgba(245,214,228,0.7);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1); }
         }
 
         /* --- REPRODUCTOR DE MÚSICA (STICKY) --- */
@@ -152,7 +183,7 @@
             position: absolute; top: 90px; left: 50%; transform: translateX(-50%);
             width: 45px; height: 45px; background-color: var(--fuchsia-main);
             border-radius: 50%; z-index: 5; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 4px 15px rgba(209, 32, 122, 0.4); 
+            box-shadow: 0 4px 15px rgba(193, 93, 137, 0.4);
             transition: opacity 0.5s ease 0.1s, transform 0.5s ease;
         }
         
@@ -182,7 +213,7 @@
         .ribbon-container {
             width: 85%; /* Deja margen a los lados para mostrar el fondo */
             max-width: 550px; 
-            background-color: rgba(209, 32, 122, 0.90); /* Fucsia con ligera transparencia */
+            background-color: rgba(193, 93, 137, 0.90); /* Fucsia atenuado con ligera transparencia */
             margin: 0 auto;
             box-shadow: 0 0 35px rgba(0,0,0,0.4);
             min-height: 100vh;
@@ -302,6 +333,43 @@
             font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
+        /* Widget de Cuenta Regresiva */
+        .countdown-wrapper {
+            width: 100%; max-width: 340px; margin: 35px auto; padding: 30px 15px;
+            background: rgba(255, 255, 255, 0.1); border-radius: 2px; box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+            box-sizing: border-box; border: 1px solid rgba(255,255,255,0.25); position: relative; z-index: 2;
+            backdrop-filter: blur(5px);
+        }
+
+        .countdown-title {
+            font-family: 'Cinzel', serif; font-size: 14px; color: var(--accent-light);
+            text-transform: uppercase; letter-spacing: 4px; margin-bottom: 22px; font-weight: 600;
+        }
+
+        .countdown-grid {
+            display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+        }
+
+        .countdown-item {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .countdown-item span {
+            font-family: 'Cinzel', serif; font-size: 32px; font-weight: 600;
+            color: var(--white-pure); line-height: 1;
+        }
+
+        .countdown-item small {
+            font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 600;
+            letter-spacing: 2px; text-transform: uppercase; color: var(--accent-light);
+            margin-top: 8px;
+        }
+
+        .countdown-sep {
+            font-family: 'Cinzel', serif; font-size: 26px; color: var(--white-pure);
+            opacity: 0.5; padding-top: 2px;
+        }
+
         /* Mapas */
         .map-box {
             width: 100%; max-width: 100%; height: 280px; margin: 30px auto;
@@ -355,6 +423,7 @@
             .envelope { width: 280px; height: 180px; }
             .envelope::before, .envelope::after { border-left-width: 140px; border-right-width: 140px; border-top-width: 90px; border-bottom-width: 90px; }
             .front-flap { border-left-width: 140px; border-right-width: 140px; border-top-width: 95px; }
+            .countdown-item span { font-size: 24px; }
         }
     </style>
 </head>
@@ -362,6 +431,9 @@
 
     <!-- AUDIO OCULTO -->
     <audio id="bg-music" src="assets/song.mp3" loop></audio>
+
+    <!-- CAPA DE BRILLITOS / GLITTER -->
+    <div class="glitter-container" id="glitter-container"></div>
 
     <!-- BOTÓN STICKY DE MÚSICA -->
     <button id="music-btn" class="sticky-music-btn" onclick="toggleMusic()" aria-label="Controlar música">
@@ -403,7 +475,7 @@
                     <img src="assets/1.jpg" alt="Grecia Denisse" onerror="this.style.display='none'">
                 </div>
                 <p class="anim-element anim-fade-up delay-4 body-serif" style="margin-top: 15px;">
-                    "Hoy celebro el inicio de una nueva etapa, agradeciendo a Dios por la vida y a mi familia por acompañarme en cada paso del camino."
+                    "Quince años, una vida de momentos y un mundo entero de sueños por descubrir. Hoy quiero celebrar este nuevo comienzo rodeada de quienes hacen especial mi historia."
                 </p>
             </section>
 
@@ -429,7 +501,7 @@
                 </div>
             </section>
 
-            <!-- Sección 3: Fecha (Calendario) y Foto 4 -->
+            <!-- Sección 3: Fecha (Calendario, Cuenta Regresiva) y Foto 4 -->
             <section class="section-block" style="border-top: 1px solid rgba(255,255,255,0.2);">
                 <div class="anim-element anim-fade-up delay-1 info-title" style="letter-spacing: 2px;">Será un honor contar con tu presencia el</div>
                 <div class="anim-element anim-fade-up delay-2 info-data" style="font-size: 38px; font-weight: 600;">21 de Noviembre</div>
@@ -445,6 +517,20 @@
                         <div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day">19</div><div class="cal-day">20</div><div class="cal-day active">21</div>
                         <div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div><div class="cal-day">28</div>
                         <div class="cal-day">29</div><div class="cal-day">30</div><div></div><div></div><div></div><div></div><div></div>
+                    </div>
+                </div>
+
+                <!-- Cuenta Regresiva -->
+                <div class="anim-element anim-zoom delay-4 countdown-wrapper">
+                    <div class="countdown-title" id="countdown-title">Faltan</div>
+                    <div class="countdown-grid" id="countdown-grid">
+                        <div class="countdown-item"><span id="cd-days">00</span><small>Días</small></div>
+                        <div class="countdown-sep">:</div>
+                        <div class="countdown-item"><span id="cd-hours">00</span><small>Hrs</small></div>
+                        <div class="countdown-sep">:</div>
+                        <div class="countdown-item"><span id="cd-mins">00</span><small>Min</small></div>
+                        <div class="countdown-sep">:</div>
+                        <div class="countdown-item"><span id="cd-secs">00</span><small>Seg</small></div>
                     </div>
                 </div>
 
@@ -631,6 +717,27 @@
     </main>
 
     <script>
+        // --- GENERACIÓN DE BRILLITOS / GLITTER ---
+        function createSparkles() {
+            const container = document.getElementById('glitter-container');
+            const total = 45;
+            for (let i = 0; i < total; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle' + (Math.random() > 0.6 ? ' pink' : '');
+                const size = (Math.random() * 3 + 2).toFixed(1); // 2px a 5px
+                sparkle.style.width = size + 'px';
+                sparkle.style.height = size + 'px';
+                sparkle.style.top = (Math.random() * 100) + '%';
+                sparkle.style.left = (Math.random() * 100) + '%';
+                const duration = (Math.random() * 2.5 + 2).toFixed(2); // 2s a 4.5s
+                const delay = (Math.random() * 5).toFixed(2);
+                sparkle.style.animationDuration = duration + 's';
+                sparkle.style.animationDelay = delay + 's';
+                container.appendChild(sparkle);
+            }
+        }
+        createSparkles();
+
         // --- CONTROL DE AUDIO ---
         let isMusicPlaying = false;
         const bgMusic = document.getElementById('bg-music');
@@ -692,6 +799,46 @@
 
             document.querySelectorAll('.anim-element').forEach(el => observer.observe(el));
         });
+
+        // --- CUENTA REGRESIVA AL EVENTO ---
+        // 21 de Noviembre de 2026, 5:00 p.m. hora de Ciudad de México (UTC-6)
+        const eventDate = new Date("2026-11-21T17:00:00-06:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            const cdDays = document.getElementById('cd-days');
+            const cdHours = document.getElementById('cd-hours');
+            const cdMins = document.getElementById('cd-mins');
+            const cdSecs = document.getElementById('cd-secs');
+            const cdTitle = document.getElementById('countdown-title');
+
+            if (!cdDays) return;
+
+            if (distance <= 0) {
+                cdTitle.innerText = "¡Hoy es el gran día!";
+                cdDays.innerText = "00";
+                cdHours.innerText = "00";
+                cdMins.innerText = "00";
+                cdSecs.innerText = "00";
+                clearInterval(countdownInterval);
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((distance % (1000 * 60)) / 1000);
+
+            cdDays.innerText = String(days).padStart(2, '0');
+            cdHours.innerText = String(hours).padStart(2, '0');
+            cdMins.innerText = String(mins).padStart(2, '0');
+            cdSecs.innerText = String(secs).padStart(2, '0');
+        }
+
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
 
         // --- LÓGICA DEL SISTEMA DE PASES PARAMÉTRICO ---
         let pasesAsignados = 0;
